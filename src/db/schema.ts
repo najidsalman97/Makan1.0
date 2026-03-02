@@ -97,3 +97,65 @@ export const maintenanceTickets = sqliteTable('maintenance_tickets', {
   longitude: real('longitude'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
 });
+
+// New tables for February 2026 Digital Commerce Decree features
+
+export const leaseAmendments = sqliteTable('lease_amendments', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  leaseId: integer('lease_id').references(() => leases.id).notNull(),
+  originalLeaseHash: text('original_lease_hash').notNull(), // Hash of original lease
+  errorType: text('error_type').notNull(), // e.g., "typo_name", "wrong_unit_number"
+  errorDescription: text('error_description').notNull(),
+  correctionDetails: text('correction_details').notNull(), // JSON of what was corrected
+  amendmentHash: text('amendment_hash').notNull(), // Hash of amended lease
+  createdBy: integer('created_by').references(() => users.id).notNull(),
+  approvedBy: integer('approved_by').references(() => users.id),
+  status: text('status', { enum: ['pending', 'approved', 'rejected'] }).notNull().default('pending'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
+  approvedAt: integer('approved_at', { mode: 'timestamp' }),
+});
+
+export const maintenanceDecisions = sqliteTable('maintenance_decisions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  ticketId: integer('ticket_id').references(() => maintenanceTickets.id).notNull(),
+  landlordId: integer('landlord_id').references(() => users.id).notNull(),
+  decision: text('decision', { enum: ['approve_assign', 'reclassify', 'request_info', 'resolve'] }).notNull(),
+  newClassification: text('new_classification', { enum: ['Structural/Landlord', 'Usage/Tenant', 'Pending'] }),
+  assignedContractorId: integer('assigned_contractor_id'),
+  internalNote: text('internal_note'), // Private note not visible to tenant
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
+});
+
+export const communicationTemplates = sqliteTable('communication_templates', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  landlordId: integer('landlord_id').references(() => users.id).notNull(),
+  paymentIds: text('payment_ids').notNull(), // JSON array of payment IDs
+  templateType: text('template_type', { enum: ['whatsapp_reminder', 'email_notice', 'sms_alert'] }).notNull().default('whatsapp_reminder'),
+  templateLanguage: text('template_language', { enum: ['en', 'ar'] }).notNull(),
+  preFilledContent: text('pre_filled_content').notNull(), // JSON with tenant info and payment links
+  deliveryStatus: text('delivery_status', { enum: ['draft', 'scheduled', 'sent', 'failed'] }).notNull().default('draft'),
+  scheduledFor: integer('scheduled_for', { mode: 'timestamp' }),
+  sentAt: integer('sent_at', { mode: 'timestamp' }),
+  failureReason: text('failure_reason'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
+});
+
+export const immutableRecords = sqliteTable('immutable_records', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  recordType: text('record_type', { enum: ['payment', 'lease', 'amendment'] }).notNull(),
+  recordId: integer('record_id').notNull(), // References payment/lease/amendment ID
+  recordHash: text('record_hash').notNull(), // Cryptographic hash of record
+  pdfSnapshot: text('pdf_snapshot').notNull(), // Base64 encoded PDF snapshot
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()),
+  retentionUntil: integer('retention_until', { mode: 'timestamp' }).notNull(), // 5 years from creation
+  isImmutable: integer('is_immutable', { mode: 'boolean' }).notNull().default(true),
+});
+
+export const residencyChecks = sqliteTable('residency_checks', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').references(() => users.id).notNull(),
+  checkTimestamp: integer('check_timestamp', { mode: 'timestamp' }).notNull().default(new Date()),
+  detectedRegion: text('detected_region').notNull(),
+  isCompliant: integer('is_compliant', { mode: 'boolean' }).notNull(), // true if me-central2
+  alertTriggered: integer('alert_triggered', { mode: 'boolean' }).notNull().default(false),
+});

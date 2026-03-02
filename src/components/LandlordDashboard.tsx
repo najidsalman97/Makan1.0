@@ -13,8 +13,15 @@ import {
   AlertCircle,
   ShieldCheck,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  MessageCircle,
+  Lock,
+  Archive,
+  Download
 } from 'lucide-react';
+import CommunicationsCenter from './CommunicationsCenter';
+import AuditVault from './AuditVault';
+import LeaseAmendmentForm from './LeaseAmendmentForm';
 
 interface DashboardData {
   buildings: any[];
@@ -35,6 +42,10 @@ export default function LandlordDashboard() {
   const [isVerifying, setIsVerifying] = useState(false);
   const [showCivilId, setShowCivilId] = useState(false);
   const [auditReason, setAuditReason] = useState('');
+  const [residencyCompliant, setResidencyCompliant] = useState(true);
+  const [residencyRegion, setResidencyRegion] = useState('');
+  const [showCommunications, setShowCommunications] = useState(false);
+  const [showAuditVault, setShowAuditVault] = useState(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -50,6 +61,16 @@ export default function LandlordDashboard() {
     if (parsedUser.role === 'landlord' && (!parsedUser.mociLicenseVerified || !parsedUser.civilId)) {
       setShowMociVerification(true);
     }
+
+    // Check residency compliance
+    fetch(`/api/landlord/${parsedUser.id}/residency-check`)
+      .then(res => res.json())
+      .then(resData => {
+        if (resData.success) {
+          setResidencyCompliant(resData.isCompliant);
+          setResidencyRegion(resData.region);
+        }
+      });
 
     fetch(`/api/landlord/${parsedUser.id}/dashboard`)
       .then(res => res.json())
@@ -161,6 +182,64 @@ export default function LandlordDashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Residency Compliance Alert */}
+        {!residencyCompliant && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg flex items-start gap-3"
+          >
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="font-bold text-red-900 text-sm">CITRA Tier 4 Compliance Alert</h3>
+              <p className="text-red-800 text-sm mt-1">
+                System is running in region: <span className="font-mono font-bold">{residencyRegion}</span>. 
+                For MOCI compliance, system must run in <span className="font-mono font-bold">me-central2</span> (Kuwait). 
+                Civil ID data entry is disabled.
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <button
+            onClick={() => setShowCommunications(true)}
+            className="bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-4 transition-colors text-left"
+          >
+            <MessageCircle className="w-6 h-6 text-blue-600 mb-2" />
+            <p className="font-bold text-sm text-blue-900">Communications</p>
+            <p className="text-xs text-blue-700 mt-1">Bulk WhatsApp Reminders</p>
+          </button>
+
+          <button
+            onClick={() => setShowAuditVault(true)}
+            className="bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg p-4 transition-colors text-left"
+          >
+            <Archive className="w-6 h-6 text-red-600 mb-2" />
+            <p className="font-bold text-sm text-red-900">Audit Vault</p>
+            <p className="text-xs text-red-700 mt-1">5-Year Immutable Records</p>
+          </button>
+
+          <button
+            onClick={() => {}}
+            className="bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-4 transition-colors text-left"
+          >
+            <Lock className="w-6 h-6 text-purple-600 mb-2" />
+            <p className="font-bold text-sm text-purple-900">Lease Amendments</p>
+            <p className="text-xs text-purple-700 mt-1">Digital Addendums</p>
+          </button>
+
+          <button
+            onClick={() => {}}
+            className="bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg p-4 transition-colors text-left"
+          >
+            <Download className="w-6 h-6 text-emerald-600 mb-2" />
+            <p className="font-bold text-sm text-emerald-900">Judicial Bundles</p>
+            <p className="text-xs text-emerald-700 mt-1">One-Click Eviction Package</p>
+          </button>
+        </div>
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <motion.div 
@@ -314,15 +393,15 @@ export default function LandlordDashboard() {
                           </div>
                         </div>
                         {unit.lease && unit.lease.isExecutiveDocument && (
-                          <div className="mt-2 pt-2 border-t border-zinc-200">
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 mb-2">
+                          <div className="mt-2 pt-2 border-t border-zinc-200 space-y-2">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
                               Certified Executive Document
                             </span>
                             <a 
-                              href={`/api/landlord/${user.id}/eviction-package/${unit.lease.id}`}
-                              className="block w-full text-center text-xs font-bold text-blue-600 bg-blue-50 py-1.5 rounded hover:bg-blue-100 transition-colors"
+                              href={`/api/landlord/${user.id}/eviction-package-enhanced/${unit.lease.id}`}
+                              className="block w-full text-center text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 py-1.5 rounded transition-colors"
                             >
-                              Download Judicial Package
+                              📁 Judicial Bundle (Enhanced)
                             </a>
                           </div>
                         )}
@@ -335,6 +414,22 @@ export default function LandlordDashboard() {
           </div>
         </div>
       </main>
+
+      {/* Communications Center Modal */}
+      {showCommunications && user && (
+        <CommunicationsCenter 
+          landlordId={user.id}
+          onClose={() => setShowCommunications(false)}
+        />
+      )}
+
+      {/* Audit Vault Modal */}
+      {showAuditVault && user && (
+        <AuditVault 
+          landlordId={user.id}
+          onClose={() => setShowAuditVault(false)}
+        />
+      )}
 
       {/* MOCI Verification Modal */}
       {showMociVerification && (
