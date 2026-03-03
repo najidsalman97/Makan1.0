@@ -1,0 +1,101 @@
+/* Haris Building Dashboard Styles */
+.haris-building-dashboard {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.haris-building-dashboard h1 {
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.metric-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.metric-title {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.metric-label {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.buildings-list {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.building-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.building-item:hover {
+  background: #fafafa;
+}
+
+.building-info {
+  flex: 1;
+}
+
+.building-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.building-address {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.action-btn:hover {
+  background: #1976d2;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .building-item {
+  flex-direction: row-reverse;
+}

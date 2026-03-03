@@ -1,0 +1,126 @@
+/* Contractor Management Styles */
+.contractor-management {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.contractor-management h1 {
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+.contractor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.contractor-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.contractor-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px;
+  color: white;
+}
+
+.contractor-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.contractor-specializations {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-top: 5px;
+}
+
+.contractor-body {
+  padding: 15px;
+}
+
+.contractor-info {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #666;
+}
+
+.contractor-rating {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ff9800;
+}
+
+.contractor-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-available {
+  background: #c8e6c9;
+  color: #2e7d32;
+}
+
+.status-busy {
+  background: #ffe0b2;
+  color: #e65100;
+}
+
+.status-unavailable {
+  background: #ffcdd2;
+  color: #c62828;
+}
+
+.contractor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.contractor-actions button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-assign {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-contact {
+  background: #2196f3;
+  color: white;
+}
+
+.btn-profile {
+  background: #9c27b0;
+  color: white;
+}
+
+.rtl .contractor-header {
+  text-align: right;
+}
+
+.rtl .contractor-actions {
+  flex-direction: row-reverse;
+}
+
+.rtl .contractor-specializations {
+  text-align: right;
+}

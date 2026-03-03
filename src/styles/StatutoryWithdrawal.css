@@ -1,0 +1,191 @@
+/* Statutory Withdrawal Styles */
+.statutory-withdrawal {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.statutory-withdrawal h1 {
+  color: #1976d2;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.info-section {
+  background: #e3f2fd;
+  border-left: 4px solid #1976d2;
+  padding: 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.info-section h2 {
+  color: #1976d2;
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.info-section li {
+  margin: 8px 0;
+}
+
+.countdown-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.countdown-title {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.countdown-days {
+  font-size: 48px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.countdown-label {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.form-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.form-section h2 {
+  color: #333;
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.checkbox-group input {
+  width: auto;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: #4caf50;
+  color: white;
+  flex: 1;
+  min-width: 150px;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #eeeeee;
+}
+
+.warning-message {
+  background: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+  color: #856404;
+}
+
+.success-message {
+  background: #d4edda;
+  border-left: 4px solid #28a745;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 15px 0;
+  color: #155724;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .info-section {
+  border-left: none;
+  border-right: 4px solid #1976d2;
+}
+
+.rtl .warning-message {
+  border-left: none;
+  border-right: 4px solid #ffc107;
+}
+
+.rtl .success-message {
+  border-left: none;
+  border-right: 4px solid #28a745;
+}
+
+.rtl .checkbox-group {
+  flex-direction: row-reverse;
+}
+
+.rtl .action-buttons {
+  flex-direction: row-reverse;
+}

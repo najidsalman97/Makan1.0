@@ -1,0 +1,141 @@
+/* Dispute Resolution Styles */
+.dispute-resolution {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dispute-resolution h1 {
+  color: #1976d2;
+  margin-bottom: 20px;
+}
+
+.dispute-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.dispute-card {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-left: 4px solid #ff9800;
+}
+
+.dispute-card.resolved {
+  border-left-color: #4caf50;
+}
+
+.dispute-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.dispute-id {
+  font-weight: 600;
+  color: #333;
+}
+
+.dispute-status {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #fff3e0;
+  color: #f57c00;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dispute-body {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.timeline {
+  margin: 15px 0;
+  border-left: 2px solid #ddd;
+  padding-left: 15px;
+}
+
+.timeline-item {
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -17px;
+  top: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1976d2;
+}
+
+.timeline-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.timeline-text {
+  color: #333;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-escalate {
+  background: #f44336;
+  color: white;
+}
+
+.btn-resolve {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-message {
+  background: #2196f3;
+  color: white;
+}
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl .timeline {
+  border-left: none;
+  border-right: 2px solid #ddd;
+  padding-left: 0;
+  padding-right: 15px;
+}
+
+.rtl .timeline-item::before {
+  left: auto;
+  right: -17px;
+}
+
+.rtl .action-buttons {
+  flex-direction: row-reverse;
+}
