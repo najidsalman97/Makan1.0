@@ -95,20 +95,20 @@ const AdvancedSearch: React.FC = () => {
   };
 
   const handleExportResults = () => {
-    const csv = [
-      ['Type', 'Title', 'Subtitle', 'Date', 'Status'],
-      ...results.map((r) => [
-        r.type,
-        r.title,
-        r.subtitle || '',
-        r.date || '',
-        r.status || '',
-      ]),
-    ]
-      .map((row) => row.map((cell) => `"${cell}"`).join(','))
+    const headers = ['Type', 'Title', 'Subtitle', 'Date', 'Status'];
+    const rows = results.map((r) => [
+      r.type,
+      r.title,
+      r.subtitle || '',
+      r.date || '',
+      r.status || '',
+    ]);
+
+    const csvRows = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${String(cell)}"`).join(','))
       .join('\n');
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csvRows], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
