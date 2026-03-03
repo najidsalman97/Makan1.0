@@ -12,7 +12,7 @@ const upload = multer({ dest: 'uploads/' });
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = 5173;
 
   app.use(express.json());
 
