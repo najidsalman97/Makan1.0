@@ -95,25 +95,13 @@ const AdvancedSearch: React.FC = () => {
   };
 
   const handleExportResults = () => {
-    const headers = ['Type', 'Title', 'Subtitle', 'Date', 'Status'];
-    const rows = results.map((r) => [
-      r.type,
-      r.title,
-      r.subtitle || '',
-      r.date || '',
-      r.status || '',
-    ]);
-
-    const csvRows = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${String(cell)}"`).join(','))
-      .join('\n');
-
-    const blob = new Blob([csvRows], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `search-results-${Date.now()}.csv`;
-    a.click();
+    const fileContent = results.map(r => `${r.type},${r.title},"${r.subtitle || ''}","${r.date || ''}","${r.status || ''}"`).join('\n');
+    const csv = 'Type,Title,Subtitle,Date,Status\n' + fileContent;
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'search-results.csv';
+    link.click();
   };
 
   const getResultIcon = (type: string): string => {
