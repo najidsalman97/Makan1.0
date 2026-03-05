@@ -259,6 +259,7 @@ export default function LandlordLeaseAmendments({ onClose, isModal = false }: La
             )}
           </div>
         </div>
+        </div>
       </div>
     </div>
   );
