@@ -17,13 +17,16 @@ import {
   MessageCircle,
   Lock,
   Archive,
-  Download
+  Download,
+  Smartphone
 } from 'lucide-react';
 import AuditVault from './AuditVault';
 import LandlordCommunications from './LandlordCommunications';
 import LandlordLeaseAmendments from './LandlordLeaseAmendments';
 import LandlordJudicialBundle from './LandlordJudicialBundle';
 import PropertyManagement from './PropertyManagement';
+import PACIPropertySync from './PACIPropertySync';
+import PACIReviewImport from './PACIReviewImport';
 
 interface DashboardData {
   buildings: any[];
@@ -51,6 +54,10 @@ export default function LandlordDashboard() {
   const [showLeaseAmendments, setShowLeaseAmendments] = useState(false);
   const [showJudicialBundle, setShowJudicialBundle] = useState(false);
   const [showPropertyManagement, setShowPropertyManagement] = useState(false);
+  const [showPACISync, setShowPACISync] = useState(false);
+  const [showPACIReview, setShowPACIReview] = useState(false);
+  const [paciProperties, setPACIProperties] = useState<any[]>([]);
+  const [paciTransactionId, setPACITransactionId] = useState('');
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -207,7 +214,7 @@ export default function LandlordDashboard() {
         )}
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
           <button
             onClick={() => setShowPropertyManagement(true)}
             className="bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg p-4 transition-colors text-left"
@@ -215,6 +222,15 @@ export default function LandlordDashboard() {
             <Building2 className="w-6 h-6 text-indigo-600 mb-2" />
             <p className="font-bold text-sm text-indigo-900">Properties</p>
             <p className="text-xs text-indigo-700 mt-1">Add & Manage</p>
+          </button>
+
+          <button
+            onClick={() => setShowPACISync(true)}
+            className="bg-cyan-50 hover:bg-cyan-100 border border-cyan-200 rounded-lg p-4 transition-colors text-left"
+          >
+            <Smartphone className="w-6 h-6 text-cyan-600 mb-2" />
+            <p className="font-bold text-sm text-cyan-900">Sync PACI</p>
+            <p className="text-xs text-cyan-700 mt-1">Mobile ID Sync</p>
           </button>
 
           <button
@@ -515,6 +531,31 @@ export default function LandlordDashboard() {
           </div>
         </div>
       )}
+
+      {/* PACI Property Sync Modal */}
+      <PACIPropertySync
+        isOpen={showPACISync}
+        onClose={() => setShowPACISync(false)}
+        onAuthSuccess={(properties) => {
+          setPACIProperties(properties);
+          setShowPACISync(false);
+          setShowPACIReview(true);
+        }}
+        landlordId={user?.id || 0}
+      />
+
+      {/* PACI Review & Import Modal */}
+      <PACIReviewImport
+        isOpen={showPACIReview}
+        onClose={() => {
+          setShowPACIReview(false);
+          setPACIProperties([]);
+          setPACITransactionId('');
+        }}
+        properties={paciProperties}
+        landlordId={user?.id || 0}
+        transactionId={paciTransactionId}
+      />
     </div>
   );
 }

@@ -827,6 +827,204 @@ async function startServer() {
     }
   });
 
+  // PACI Property Sync - Authentication Endpoint
+  app.post('/api/paci/auth', async (req, res) => {
+    try {
+      const { landlordId } = req.body;
+      
+      // Generate a transaction ID for tracking
+      const transactionId = `PACI_${Date.now()}_${landlordId}`;
+      
+      // Log compliance event
+      await db.insert(schema.complianceLogs).values({
+        userId: landlordId,
+        ipAddress: req.ip || req.socket.remoteAddress || 'unknown',
+        browserFingerprint: 'paci_auth_trigger', // Can be enhanced with actual browser fingerprint
+      }).run();
+
+      // In production, this would redirect to Kuwait Mobile ID (Hawyti) OAuth
+      // For now, we simulate successful authentication
+      res.json({ 
+        success: true, 
+        transactionId,
+        authUrl: 'https://hawyti.kuwait.gov.kw/auth', // Mock OAuth URL
+        message: 'PACI authentication initiated'
+      });
+    } catch (error) {
+      console.error('PACI Auth Error:', error);
+      res.status(500).json({ error: 'Failed to initiate PACI authentication' });
+    }
+  });
+
+  // PACI Property Sync - Fetch Properties
+  app.get('/api/paci/properties', async (req, res) => {
+    try {
+      const { landlordId, transactionId } = req.query;
+      
+      if (!landlordId) {
+        return res.status(400).json({ error: 'landlordId is required' });
+      }
+
+      // Mock PACI GetPropertyOwnership API response
+      // In production, this would call the actual PACI API with the authenticated Mobile ID
+      const mockPACIProperties = [
+        {
+          building_id: 'PACI_001_2026',
+          area: 'Salmiya',
+          block: '4',
+          street: '1',
+          unit_number: '101',
+          property_type: 'Residential'
+        },
+        {
+          building_id: 'PACI_002_2026',
+          area: 'Hawally',
+          block: '8',
+          street: '5',
+          unit_number: '201',
+          property_type: 'Residential'
+        },
+        {
+          building_id: 'PACI_003_2026',
+          area: 'Kuwait City',
+          block: '12',
+          street: '3',
+          unit_number: '305',
+          property_type: 'Commercial'
+        },
+        {
+          building_id: 'PACI_004_2026',
+          area: 'Farwaniya',
+          block: '15',
+          street: '7',
+          unit_number: '401',
+          property_type: 'Residential'
+        }
+      ];
+
+      // Log the properties fetch
+      await db.insert(schema.complianceLogs).values({
+        userId: parseInt(landlordId as string),
+        ipAddress: req.ip || req.socket.remoteAddress || 'unknown',
+        browserFingerprint: `paci_properties_fetch_${transactionId}`,
+      }).run();
+
+      res.json({ 
+        success: true, 
+        properties: mockPACIProperties,
+        transactionId,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('PACI Properties Fetch Error:', error);
+      res.status(500).json({ error: 'Failed to fetch PACI properties' });
+    }
+  });
+
+  // Landlord Buildings - Get Existing Buildings
+  app.get('/api/landlord/:id/buildings', async (req, res) => {
+    try {
+      const landlordId = parseInt(req.params.id);
+      const buildings = await db.select().from(schema.buildings).where(eq(schema.buildings.landlordId, landlordId)).all();
+      
+      res.json({ 
+        success: true, 
+        buildings: buildings.map(b => ({
+          id: b.id,
+          name: b.name,
+          address: b.address,
+          paciNumber: b.paciNumber
+        }))
+      });
+    } catch (error) {
+      console.error('Buildings Fetch Error:', error);
+      res.status(500).json({ error: 'Failed to fetch buildings' });
+    }
+  });
+
+  // PACI Property Import - Import Selected Properties
+  app.post('/api/properties/import', async (req, res) => {
+    try {
+      const { landlordId, transactionId, properties, conflicts } = req.body;
+
+      if (!landlordId || !properties || properties.length === 0) {
+        return res.status(400).json({ error: 'Invalid import request' });
+      }
+
+      let importedCount = 0;
+      let linkedCount = 0;
+      const errors: string[] = [];
+
+      for (const prop of properties) {
+        try {
+          // Check if this building already exists
+          const existingBuilding = await db.select().from(schema.buildings)
+            .where(eq(schema.buildings.paciNumber, prop.building_id))
+            .get();
+
+          if (existingBuilding) {
+            // Handle conflict
+            const action = conflicts[prop.building_id];
+            if (action === 'link') {
+              // Just link - do nothing, it's already in system
+              linkedCount++;
+            } else if (action === 'update') {
+              // Update existing building with new data
+              await db.update(schema.buildings)
+                .set({
+                  name: `${prop.area}, Block ${prop.block}`,
+                  address: `${prop.area}, Block ${prop.block}, Street ${prop.street}`,
+                })
+                .where(eq(schema.buildings.id, existingBuilding.id))
+                .run();
+              linkedCount++;
+            }
+          } else {
+            // Create new building
+            const buildingId = await db.insert(schema.buildings).values({
+              landlordId: parseInt(landlordId),
+              name: `${prop.area}, Block ${prop.block}`,
+              address: `${prop.area}, Block ${prop.block}, Street ${prop.street}`,
+              paciNumber: prop.building_id
+            }).run();
+
+            // Create unit for the property
+            await db.insert(schema.units).values({
+              buildingId: buildingId.insertId as number,
+              unitNumber: prop.unit_number,
+              rentAmount: 500, // Default rent, can be updated later
+              status: 'vacant'
+            }).run();
+
+            importedCount++;
+          }
+        } catch (unitError) {
+          errors.push(`Error importing property ${prop.building_id}: ${unitError}`);
+        }
+      }
+
+      // Log the import event in compliance logs with PACI transaction ID
+      await db.insert(schema.complianceLogs).values({
+        userId: parseInt(landlordId),
+        ipAddress: req.ip || req.socket.remoteAddress || 'unknown',
+        browserFingerprint: `paci_import_${transactionId}_${importedCount}_properties`,
+      }).run();
+
+      res.json({ 
+        success: true, 
+        message: `Successfully imported properties from PACI`,
+        importedCount,
+        linkedCount,
+        totalImported: importedCount + linkedCount,
+        errors: errors.length > 0 ? errors : undefined,
+        transactionId
+      });
+    } catch (error) {
+      console.error('Properties Import Error:', error);
+      res.status(500).json({ error: 'Failed to import properties' });
+    }
+  });
+
   // AI Maintenance Engine
   app.post('/api/maintenance/upload', upload.single('image'), async (req, res) => {
     try {
