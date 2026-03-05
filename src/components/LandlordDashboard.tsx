@@ -19,7 +19,6 @@ import {
   Archive,
   Download
 } from 'lucide-react';
-import CommunicationsCenter from './CommunicationsCenter';
 import AuditVault from './AuditVault';
 import LeaseAmendmentForm from './LeaseAmendmentForm';
 

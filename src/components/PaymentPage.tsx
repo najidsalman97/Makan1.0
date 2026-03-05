@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Building2, ShieldCheck, CreditCard } from 'lucide-react';
-import StoreDisclosure from './StoreDisclosure';
 
 export default function PaymentPage() {
   const { id } = useParams();
@@ -27,23 +26,7 @@ export default function PaymentPage() {
 
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center p-4 font-sans">
-      {/* Store Disclosure Modal */}
-      {showDisclosure && (
-        <StoreDisclosure 
-          paymentData={{
-            landlordName: data.landlordName,
-            mociLicenseNumber: data.mociLicenseNumber || 'Pending',
-            rentAmount,
-            managementFee,
-            unitNumber: data.unitNumber,
-            buildingName: data.landlordName // Using landlord name as building proxy
-          }}
-          onDismiss={() => setShowDisclosure(false)}
-        />
-      )}
-
-      {!showDisclosure && (
-        <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-zinc-200 overflow-hidden">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-zinc-200 overflow-hidden">
           <div className="p-8 text-center bg-blue-900 text-white">
             <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Building2 className="w-8 h-8 text-white" />
@@ -100,7 +83,6 @@ export default function PaymentPage() {
             </div>
           </div>
         </div>
-      )}
     </div>
   );
 }

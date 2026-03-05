@@ -95,9 +95,12 @@ const AdvancedSearch: React.FC = () => {
   };
 
   const handleExportResults = () => {
-    const fileContent = results.map(r => `${r.type},${r.title},"${r.subtitle || ''}","${r.date || ''}","${r.status || ''}"`).join('\n');
-    const csv = 'Type,Title,Subtitle,Date,Status\n' + fileContent;
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    let csv = 'Type,Title,Subtitle,Date,Status\n';
+    results.forEach((r) => {
+      const row = [r.type, r.title, r.subtitle || '', r.date || '', r.status || ''].join(',');
+      csv += row + '\n';
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'search-results.csv';
