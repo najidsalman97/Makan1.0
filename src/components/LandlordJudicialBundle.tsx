@@ -86,7 +86,7 @@ export default function LandlordJudicialBundle({ onClose, isModal = false }: Lan
             )}
           </div>
 
-        <div className="bg-red-100 border-2 border-red-300 rounded-lg p-4 mb-6">
+          <div className="bg-red-100 border-2 border-red-300 rounded-lg p-4 mb-6">
           <div className="flex gap-2 items-start">
             <AlertTriangle className="w-6 h-6 text-red-600 mt-1 flex-shrink-0" />
             <div>
@@ -151,5 +151,6 @@ export default function LandlordJudicialBundle({ onClose, isModal = false }: Lan
         )}
       </div>
     </div>
+  </div>
   );
 }

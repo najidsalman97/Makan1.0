@@ -133,7 +133,7 @@ export default function LandlordLeaseAmendments({ onClose, isModal = false }: La
             )}
           </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div>
             <h2 className="text-xl font-bold text-slate-900 mb-4">Leases</h2>
             <div className="space-y-2 max-h-96 overflow-y-auto">
