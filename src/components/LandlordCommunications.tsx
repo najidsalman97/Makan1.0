@@ -249,6 +249,7 @@ export default function LandlordCommunications({ onClose, isModal = false }: Lan
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div>
   );
