@@ -20,7 +20,10 @@ import {
   Download
 } from 'lucide-react';
 import AuditVault from './AuditVault';
-import LeaseAmendmentForm from './LeaseAmendmentForm';
+import LandlordCommunications from './LandlordCommunications';
+import LandlordLeaseAmendments from './LandlordLeaseAmendments';
+import LandlordJudicialBundle from './LandlordJudicialBundle';
+import PropertyManagement from './PropertyManagement';
 
 interface DashboardData {
   buildings: any[];
@@ -45,6 +48,9 @@ export default function LandlordDashboard() {
   const [residencyRegion, setResidencyRegion] = useState('');
   const [showCommunications, setShowCommunications] = useState(false);
   const [showAuditVault, setShowAuditVault] = useState(false);
+  const [showLeaseAmendments, setShowLeaseAmendments] = useState(false);
+  const [showJudicialBundle, setShowJudicialBundle] = useState(false);
+  const [showPropertyManagement, setShowPropertyManagement] = useState(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -201,7 +207,16 @@ export default function LandlordDashboard() {
         )}
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <button
+            onClick={() => setShowPropertyManagement(true)}
+            className="bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 rounded-lg p-4 transition-colors text-left"
+          >
+            <Building2 className="w-6 h-6 text-indigo-600 mb-2" />
+            <p className="font-bold text-sm text-indigo-900">Properties</p>
+            <p className="text-xs text-indigo-700 mt-1">Add & Manage</p>
+          </button>
+
           <button
             onClick={() => setShowCommunications(true)}
             className="bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-4 transition-colors text-left"
@@ -221,7 +236,7 @@ export default function LandlordDashboard() {
           </button>
 
           <button
-            onClick={() => {}}
+            onClick={() => setShowLeaseAmendments(true)}
             className="bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg p-4 transition-colors text-left"
           >
             <Lock className="w-6 h-6 text-purple-600 mb-2" />
@@ -230,7 +245,7 @@ export default function LandlordDashboard() {
           </button>
 
           <button
-            onClick={() => {}}
+            onClick={() => setShowJudicialBundle(true)}
             className="bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg p-4 transition-colors text-left"
           >
             <Download className="w-6 h-6 text-emerald-600 mb-2" />
@@ -415,10 +430,34 @@ export default function LandlordDashboard() {
       </main>
 
       {/* Communications Center Modal */}
-      {showCommunications && user && (
-        <CommunicationsCenter 
-          landlordId={user.id}
+      {showCommunications && (
+        <LandlordCommunications 
+          isModal={true}
           onClose={() => setShowCommunications(false)}
+        />
+      )}
+
+      {/* Property Management Modal */}
+      {showPropertyManagement && (
+        <PropertyManagement 
+          isModal={true}
+          onClose={() => setShowPropertyManagement(false)}
+        />
+      )}
+
+      {/* Lease Amendments Modal */}
+      {showLeaseAmendments && (
+        <LandlordLeaseAmendments 
+          isModal={true}
+          onClose={() => setShowLeaseAmendments(false)}
+        />
+      )}
+
+      {/* Judicial Bundle Modal */}
+      {showJudicialBundle && (
+        <LandlordJudicialBundle 
+          isModal={true}
+          onClose={() => setShowJudicialBundle(false)}
         />
       )}
 

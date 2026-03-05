@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MessageSquare, Send, Search, Users, CheckCircle2, Loader } from 'lucide-react';
+import { MessageSquare, Send, Search, Users, CheckCircle2, Loader, X } from 'lucide-react';
+
+interface LandlordCommunicationsProps {
+  onClose?: () => void;
+  isModal?: boolean;
+}
 
 interface Tenant {
   id: string;
@@ -12,7 +17,7 @@ interface Tenant {
   amountDue: number;
 }
 
-export default function LandlordCommunications() {
+export default function LandlordCommunications({ onClose, isModal = false }: LandlordCommunicationsProps) {
   const { t, i18n } = useTranslation();
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [selectedTenants, setSelectedTenants] = useState<string[]>([]);
@@ -91,15 +96,23 @@ export default function LandlordCommunications() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-6">
-      <div className="max-w-7xl mx-auto" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3 mb-2">
-            <MessageSquare className="w-8 h-8 text-blue-600" />
-            Bulk Communications
-          </h1>
-          <p className="text-slate-600">Send WhatsApp/SMS reminders with unique K-Net payment links</p>
-        </div>
+    <div className={isModal ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4' : 'min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-6'}>
+      <div className={isModal ? 'bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto' : 'w-full'}>
+        <div className="max-w-7xl mx-auto" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="mb-8 flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3 mb-2">
+                <MessageSquare className="w-8 h-8 text-blue-600" />
+                {t('common.communications') || 'Bulk Communications'}
+              </h1>
+              <p className="text-slate-600">Send WhatsApp/SMS reminders with unique K-Net payment links</p>
+            </div>
+            {isModal && onClose && (
+              <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                <X size={24} />
+              </button>
+            )}
+          </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, Download, Zap, Mail, AlertTriangle } from 'lucide-react';
+import { FileText, Download, Zap, Mail, AlertTriangle, X } from 'lucide-react';
+
+interface LandlordJudicialBundleProps {
+  onClose?: () => void;
+  isModal?: boolean;
+}
 
 interface DelinquentLease {
   id: string;
@@ -12,7 +17,7 @@ interface DelinquentLease {
   lastPaymentDate: Date;
 }
 
-export default function LandlordJudicialBundle() {
+export default function LandlordJudicialBundle({ onClose, isModal = false }: LandlordJudicialBundleProps) {
   const { t, i18n } = useTranslation();
   const [bundles, setBundles] = useState<any[]>([]);
   const [delinquent, setDelinquent] = useState<DelinquentLease[]>([]);
@@ -63,15 +68,23 @@ export default function LandlordJudicialBundle() {
   const totalArrears = delinquent.reduce((sum, d) => sum + d.totalArrears, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 p-6">
-      <div className="max-w-6xl mx-auto" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3 mb-2">
-            <FileText className="w-8 h-8 text-red-600" />
-            Judicial Bundle Generator
-          </h1>
-          <p className="text-slate-600">One-click eviction package for law enforcement</p>
-        </div>
+    <div className={isModal ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4' : 'min-h-screen bg-gradient-to-br from-red-50 to-orange-50 p-6'}>
+      <div className={isModal ? 'bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto' : 'w-full'}>
+        <div className="max-w-6xl mx-auto" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="mb-8 flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3 mb-2">
+                <FileText className="w-8 h-8 text-red-600" />
+                {t('common.judicialBundle') || 'Judicial Bundle Generator'}
+              </h1>
+              <p className="text-slate-600">One-click eviction package for law enforcement</p>
+            </div>
+            {isModal && onClose && (
+              <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                <X size={24} />
+              </button>
+            )}
+          </div>
 
         <div className="bg-red-100 border-2 border-red-300 rounded-lg p-4 mb-6">
           <div className="flex gap-2 items-start">

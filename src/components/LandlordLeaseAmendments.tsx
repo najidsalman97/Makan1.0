@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, Plus, Trash2, CheckCircle2, Loader } from 'lucide-react';
+import { FileText, Plus, Trash2, CheckCircle2, Loader, X } from 'lucide-react';
+
+interface LandlordLeaseAmendmentsProps {
+  onClose?: () => void;
+  isModal?: boolean;
+}
 
 interface Lease {
   id: string;
@@ -23,7 +28,7 @@ interface Amendment {
   createDate: Date;
 }
 
-export default function LandlordLeaseAmendments() {
+export default function LandlordLeaseAmendments({ onClose, isModal = false }: LandlordLeaseAmendmentsProps) {
   const { t, i18n } = useTranslation();
   const [leases, setLeases] = useState<Lease[]>([]);
   const [amendments, setAmendments] = useState<Amendment[]>([]);
@@ -110,15 +115,23 @@ export default function LandlordLeaseAmendments() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 p-6">
-      <div className="max-w-6xl mx-auto" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3 mb-2">
-            <FileText className="w-8 h-8 text-teal-600" />
-            Lease Amendments
-          </h1>
-          <p className="text-slate-600">Digital addendums with e-signature & version control</p>
-        </div>
+    <div className={isModal ? 'fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4' : 'min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 p-6'}>
+      <div className={isModal ? 'bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto' : 'w-full'}>
+        <div className="max-w-6xl mx-auto" dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+          <div className="mb-8 flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3 mb-2">
+                <FileText className="w-8 h-8 text-teal-600" />
+                {t('common.leaseAmendments') || 'Lease Amendments'}
+              </h1>
+              <p className="text-slate-600">Digital addendums with e-signature & version control</p>
+            </div>
+            {isModal && onClose && (
+              <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                <X size={24} />
+              </button>
+            )}
+          </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div>
