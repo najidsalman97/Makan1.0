@@ -42,7 +42,3 @@ The app will start on [http://localhost:5173](http://localhost:5173).
 
 - All data is stored in Kuwait (me-central2 region) and complies with CITRA and MOCI regulations.
 - PACI sync events are logged for legal audit trail.
-
-## Credits
-
-This app was designed and implemented by a developer for Kuwait property management. All features, integrations, and compliance logic are hand-coded and maintained for production use.
