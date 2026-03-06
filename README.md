@@ -1,6 +1,6 @@
 # Makan 1.0 - Kuwait Property Management Portal
 
-This project was built by a developer for real-world property management in Kuwait. It is not an AI Studio template or auto-generated project.
+This project was built for real-world property management in Kuwait.
 
 ## Key Features
 
