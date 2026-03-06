@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AIClassificationService, { ClassificationResult } from '../services/AIClassificationService';
+// import AIClassificationService, { ClassificationResult } from '../services/AIClassificationService';
 import '../styles/HarisMaintenanceAI.css';
 
 const HarisMaintenanceAI: React.FC = () => {
@@ -35,11 +35,7 @@ const HarisMaintenanceAI: React.FC = () => {
     setError(null);
 
     try {
-      const result = await AIClassificationService.classifyMaintenanceIssue(
-        selectedImage,
-        description
-      );
-      setClassification(result);
+      // Analysis functionality removed (AI deprecated)
     } catch (err) {
       setError((err as Error).message);
     } finally {

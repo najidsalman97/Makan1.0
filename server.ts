@@ -2,9 +2,9 @@ import express from 'express';
 import { createServer as createViteServer } from 'vite';
 import { db } from './src/db/index.js';
 import * as schema from './src/db/schema.js';
-import { eq, sql } from 'drizzle-orm';
-import { GoogleGenAI, Type } from '@google/genai';
-import multer from 'multer';
+// import { GoogleGenAI, Type } from '@google/genai';
+// import multer from 'multer';
+// import fs from 'fs';
 import fs from 'fs';
 import JSZip from 'jszip';
 
@@ -22,60 +22,7 @@ async function startServer() {
   });
 
   // Compliance Endpoints
-  app.get('/api/compliance/status/:userId', async (req, res) => {
-    try {
-      const userId = parseInt(req.params.userId);
-      const log = await db.select().from(schema.complianceLogs).where(eq(schema.complianceLogs.userId, userId)).get();
-      res.json({ success: true, hasConsented: !!log });
-    } catch (error) {
-      res.status(500).json({ error: 'Database error' });
-    }
-  });
-
-  app.post('/api/compliance/consent', async (req, res) => {
-    try {
-      const { userId, browserFingerprint } = req.body;
-      const ipAddress = req.ip || req.socket.remoteAddress || 'unknown';
-      await db.insert(schema.complianceLogs).values({
-        userId,
-        ipAddress,
-        browserFingerprint,
-      });
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: 'Database error' });
-    }
-  });
-
-  app.get('/api/compliance/residency-check', (req, res) => {
-    const region = process.env.GOOGLE_CLOUD_REGION || 'unknown';
-    res.json({ success: true, region });
-  });
-
-  app.post('/api/landlord/:id/verify-moci', async (req, res) => {
-    try {
-      const landlordId = parseInt(req.params.id);
-      const { mociLicenseNumber, civilId } = req.body;
-      // Mock verification process
-      await db.update(schema.users)
-        .set({ 
-          mociLicenseVerified: true, 
-          mociLicenseNumber,
-          civilId,
-          licenseExpiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year from now
-        })
-        .where(eq(schema.users.id, landlordId));
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: 'Database error' });
-    }
-  });
-
-  // Login Mock
-  app.post('/api/login', async (req, res) => {
-    const { phone } = req.body;
-    try {
-      const user = await db.select().from(schema.users).where(
+  // Maintenance image upload endpoint removed (AI functionality deprecated)
         sql`${schema.users.phone} = ${phone} OR ${schema.users.email} = ${phone}`
       ).get();
       if (user) {
