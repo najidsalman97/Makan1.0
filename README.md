@@ -5,7 +5,7 @@
 
 # Makan 1.0 - Kuwait Property Management Portal
 
-Makan 1.0 is a full-featured property management platform for Kuwait, designed for landlords, tenants, haris (building managers), and superadmins. It supports compliance with Kuwait's CITRA and MOCI regulations, and integrates with PACI for property ownership sync.
+This project was built by a developer for real-world property management in Kuwait. It is not an AI Studio template or auto-generated project.
 
 ## Key Features
 
@@ -19,6 +19,7 @@ Makan 1.0 is a full-featured property management platform for Kuwait, designed f
 - **Audit Vault**: Immutable 5-year audit logs for all transactions and compliance events.
 - **Bulk Communications**: Send WhatsApp/SMS reminders to tenants.
 - **CITRA Compliance**: All data residency and audit requirements enforced.
+- **AI Maintenance Triage**: (Optional) Use Gemini AI for automated maintenance issue classification from images and descriptions.
 
 ## Technologies Used
 
@@ -28,6 +29,7 @@ Makan 1.0 is a full-featured property management platform for Kuwait, designed f
 - SQLite with Drizzle ORM
 - Tailwind CSS
 - i18n (English/Arabic)
+- Gemini AI (for maintenance triage, if enabled)
 
 ## Getting Started
 
@@ -35,7 +37,8 @@ Makan 1.0 is a full-featured property management platform for Kuwait, designed f
 
 1. Install dependencies:
    `npm install`
-2. Run the app:
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key (for AI maintenance triage)
+3. Run the app:
    `npm run dev`
 
 The app will start on [http://localhost:5173](http://localhost:5173).
@@ -45,6 +48,6 @@ The app will start on [http://localhost:5173](http://localhost:5173).
 - All data is stored in Kuwait (me-central2 region) and complies with CITRA and MOCI regulations.
 - PACI sync events are logged for legal audit trail.
 
-## No AI Features
+## Credits
 
-All AI-related code and services have been removed. The app is focused on secure, compliant property management for Kuwait.
+This app was designed and implemented by a developer for Kuwait property management. All features, integrations, and compliance logic are hand-coded and maintained for production use.
